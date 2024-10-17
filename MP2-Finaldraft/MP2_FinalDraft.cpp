@@ -129,7 +129,7 @@ int main() {
 }
 
 char getInput(void) {
-
+	
 	while (!cin.fail() && ((continue_or_quit != 'e') || (continue_or_quit != 'E') || !(continue_or_quit != 'r') || !(continue_or_quit != 'R'))) {
 		cout << "\n Enter 'R' if you would like to roll, or enter 'E' if you would like to terminate your turn" << endl;
 		cin >> continue_or_quit;
@@ -168,5 +168,5 @@ bool isGameScoreLost(int die1value, int die2value) {
 }
 
 int rollDie(void) {
-	return rand() % 6 + 1;
+	return rand() % 6 + 1; 
 }
