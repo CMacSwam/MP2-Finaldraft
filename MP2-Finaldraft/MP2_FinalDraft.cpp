@@ -1,8 +1,18 @@
+/*
+* Author:Chase McCluskey
+* Date: 10/17/2024
+* File: MP2-Roll'em Pigs
+* 
+* Description: Create a dice based game using functions, random number generator, and user input against a computer 
+*/
+
 #include <iomanip>
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
 #include <chrono>
+#include <chrono>
+#include <thread>
 
 using namespace std;
 
@@ -18,6 +28,7 @@ int score2 = 0;
 int turn_score1 = 0;
 int turn_score2 = 0;
 char continue_or_quit;
+chrono::nanoseconds seconds(550000000);
 
 //main function 
 
@@ -26,19 +37,24 @@ int main() {
 	srand(static_cast<unsigned int>(time(0)));
 
 	while (!GameWon) {
-		cout << "\n --- Human Turn --- \n";
+
+		cout << "\n --- Players Turn --- \n";
+
 		bool playerturnover = false;
 
 		while (!playerturnover) {
 
-			getInput();
+			char playerchoice = getInput();
 
-			if (continue_or_quit == 'r' || 'R') {
+			this_thread::sleep_for(seconds);
+
+			if (playerchoice == 'r' || playerchoice == 'R') {
 
 				int die1 = rollDie();
 				int die2 = rollDie();
 
 				cout << "You rolled a " << die1 << " and " << die2 << endl;
+				this_thread::sleep_for(seconds);
 
 				if (isGameScoreLost(die1, die2)) {
 					score1 = 0;
@@ -56,7 +72,7 @@ int main() {
 				}
 			}
 
-			else if (!cin.fail() && (continue_or_quit == 'e' || continue_or_quit == 'E')) {
+			else if (!cin.fail() && (playerchoice == 'e' || playerchoice == 'E')) {
 				score1 += turn_score1;
 				playerturnover = true;
 			}
@@ -71,6 +87,8 @@ int main() {
 		}
 
 		bool computerturnover = false;
+
+		this_thread::sleep_for(seconds);
 
 		cout << "\n ---- Computers Turn ---- \n" << endl;
 
@@ -91,7 +109,7 @@ int main() {
 			}
 			else {
 				turn_score2 += die1 + die2;
-				cout << "Computer's points for that round are " << turn_score2;
+				cout << "Computer's points for that round are " << turn_score2 << endl;
 
 				if (turn_score2 >= 20 || (score2 + turn_score2 >= 100)) {
 					score2 += turn_score2;
@@ -111,10 +129,12 @@ int main() {
 }
 
 char getInput(void) {
-	
+
 	while (!cin.fail() && ((continue_or_quit != 'e') || (continue_or_quit != 'E') || !(continue_or_quit != 'r') || !(continue_or_quit != 'R'))) {
-		cout << "Enter 'R' if you would like to roll, or enter 'E' if you would like to terminate your turn" << endl;
+		cout << "\n Enter 'R' if you would like to roll, or enter 'E' if you would like to terminate your turn" << endl;
 		cin >> continue_or_quit;
+		cout << endl;
+		break;
 	}
 
 	return continue_or_quit;
@@ -148,5 +168,5 @@ bool isGameScoreLost(int die1value, int die2value) {
 }
 
 int rollDie(void) {
-	return rand() % 6 + 1; 
+	return rand() % 6 + 1;
 }
