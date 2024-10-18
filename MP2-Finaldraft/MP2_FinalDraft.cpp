@@ -11,7 +11,6 @@
 #include <ctime>
 #include <cstdlib>
 #include <chrono>
-#include <chrono>
 #include <thread>
 
 using namespace std;
@@ -28,7 +27,7 @@ int score2 = 0;
 int turn_score1 = 0;
 int turn_score2 = 0;
 char continue_or_quit;
-chrono::nanoseconds seconds(550000000);
+chrono::nanoseconds seconds(500000000);
 
 //main function 
 
@@ -58,6 +57,7 @@ int main() {
 
 				if (isGameScoreLost(die1, die2)) {
 					score1 = 0;
+					turn_score1 = 0;
 					cout << "You rolled two 1's! You lose all your points! \n";
 					playerturnover = true;
 				}
@@ -74,11 +74,13 @@ int main() {
 
 			else if (!cin.fail() && (playerchoice == 'e' || playerchoice == 'E')) {
 				score1 += turn_score1;
+				turn_score1 = 0;
 				playerturnover = true;
 			}
 		}
 
-		cout << "Your total socre: " << score1 << endl;
+		this_thread::sleep_for(seconds);
+		cout << "Your total score: " << score1 << endl;
 
 		if (isWinningScore(score1)) {
 			cout << "Congradulations! You WON!\n" << endl;
@@ -93,9 +95,11 @@ int main() {
 		cout << "\n ---- Computers Turn ---- \n" << endl;
 
 		while (!computerturnover) {
+			
 			int die1 = rollDie();
 			int die2 = rollDie();
 			cout << "Computer rolled: " << die1 << " and " << die2 << endl;
+			this_thread::sleep_for(seconds);
 
 			if (isGameScoreLost(die1, die2)) {
 				score2 = 0;
@@ -113,11 +117,13 @@ int main() {
 
 				if (turn_score2 >= 20 || (score2 + turn_score2 >= 100)) {
 					score2 += turn_score2;
+					turn_score2 = 0;
 					computerturnover = true;
 				}
 			}
 		}
 
+		this_thread::sleep_for(seconds);
 		cout << "Computers total score: " << score2 << endl;
 
 		if (isWinningScore(score2)) {
