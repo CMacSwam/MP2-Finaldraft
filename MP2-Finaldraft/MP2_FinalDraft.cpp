@@ -48,7 +48,7 @@ int main() {
 
 		while (!playerturnover) {
 
-			//utilize beginning function and implement a wait before next output
+			//utilize input function(getInput) and implement a wait before next output
 			char playerchoice = getInput();
 			this_thread::sleep_for(seconds);
 
@@ -58,10 +58,11 @@ int main() {
 				int die1 = rollDie();
 				int die2 = rollDie();
 
+				//printing out die values, followed by a wait function 
 				cout << "You rolled a " << die1 << " and " << die2 << endl;
 				this_thread::sleep_for(seconds);
 
-				//determining if any points are lost 
+				//Function takes 2 integer arguments, if true, total score and round score points are lost, player turn over 
 				if (isGameScoreLost(die1, die2)) {
 					score1 = 0;
 					turn_score1 = 0;
@@ -69,21 +70,21 @@ int main() {
 					playerturnover = true;
 				}
 
-				//if gamescore isnt lost, turnpoints lost function is checked 
+				//Function takes 2 integer arguments, if ture, round score is lost, player turn over 
 				else if (isTurnPointsLost(die1, die2)) {
 					turn_score1 = 0;
 					cout << "You rolled a 1! You lose your points for this round\n";
 					playerturnover = true;
 				}
 
-				//if all other functions are false, points are added 
+				//If previous functions fail, then die values added to round score, print out updated score for round
 				else {
 					turn_score1 += die1 + die2;
 					cout << "Your points for this round: " << turn_score1 << endl;
 				}
 			}
 
-			//if player chooses not to roll again
+			//If player terminates turn, then round score is added to total score, and round score reset to 0, player tun over 
 			else if (!cin.fail() && (playerchoice == 'e' || playerchoice == 'E')) {
 				score1 += turn_score1;
 				turn_score1 = 0;
@@ -91,10 +92,11 @@ int main() {
 			}
 		}
 
+		//wait function, then total score printed 
 		this_thread::sleep_for(seconds);
 		cout << "Your total score: " << score1 << endl;
 
-		//checking to see if player won
+		//checking to see if player won, if true, gameover(while loop terminated)
 		if (isWinningScore(score1)) {
 			cout << "Congradulations! You WON!\n" << endl;
 			GameWon = true;
@@ -114,29 +116,31 @@ int main() {
 			int die1 = rollDie();
 			int die2 = rollDie();
 
+			//prints out die values, then wait function 
 			cout << "Computer rolled: " << die1 << " and " << die2 << endl;
 			this_thread::sleep_for(seconds);
 
-			//checking if both die values = 1 
+			//Function takes 2 integer values as arguments, if true(both die = 1), round score and total score lost, computer turn over 
 			if (isGameScoreLost(die1, die2)) {
+				turn_score2 = 0;
 				score2 = 0;
 				cout << "Computer rolled two 1's. Computer loses all points\n";
 				computerturnover = true;
 			}
 
-			//if gamescore is not lost, checking to see if turn score is lost 
+			//Function takes 2 integer arguments, if true(either die = 1), round score is lost, computer turn over 
 			else if (isTurnPointsLost(die1, die2)) {
 				turn_score2 = 0;
 				cout << "Computer rolled a 1. Computer lost all points for this round\n";
 				computerturnover = true;
 			}
 
-			//if the above functions are flase then score is added 
+			//If above functions false, then die vlaues added to round score, then printed out 
 			else {
 				turn_score2 += die1 + die2;
 				cout << "Computer's points for that round are " << turn_score2 << endl;
 
-				//checking computer score 
+				//checking computer score, if greater then 20 or 100, round score added to total score, round score reset, computer turn over 
 				if (turn_score2 >= 20 || (score2 + turn_score2 >= 100)) {
 					score2 += turn_score2;
 					turn_score2 = 0;
@@ -145,10 +149,11 @@ int main() {
 			}
 		}
 
+		//wait function, then computer total score printed 
 		this_thread::sleep_for(seconds);
 		cout << "Computers total score: " << score2 << endl;
 
-		//checking if computer won
+		//checking if computer won, if true, game while loop terminated 
 		if (isWinningScore(score2)) {
 			cout << "Computer won the game! Better luck next time\n";
 			GameWon = true;
@@ -181,7 +186,7 @@ bool isWinningScore(int score) {
 	}
 }
 
-//if die=1 score points are lost 
+//if one die = 1 score points are lost 
 bool isTurnPointsLost(int die1value, int die2value) {
 
 	if (die1value == 1 || die2value == 1) {
@@ -193,7 +198,7 @@ bool isTurnPointsLost(int die1value, int die2value) {
 	}
 }
 
-//checking is die1 and 2 = 1, then score lost 
+//checking if both die = 1, then round score and total score lost 
 bool isGameScoreLost(int die1value, int die2value) {
 
 	if (die1value == 1 && die2value == 1) {
