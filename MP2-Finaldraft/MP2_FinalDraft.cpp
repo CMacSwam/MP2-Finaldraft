@@ -137,6 +137,7 @@ int main() {
 
 			//If above functions false, then die vlaues added to round score, then printed out 
 			else {
+
 				turn_score2 += die1 + die2;
 				cout << "Computer's points for that round are " << turn_score2 << endl;
 
@@ -212,7 +213,5 @@ bool isGameScoreLost(int die1value, int die2value) {
 
 //rolling die function 
 int rollDie(void) {
-
 	return rand() % 6 + 1; 
-
 }
